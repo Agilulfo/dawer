@@ -14,4 +14,4 @@ run:
 	@python dawer
 
 test:
-	@py.test
+	@py.test -s
