@@ -12,3 +12,6 @@ isort:
 
 run:
 	@python dawer
+
+test:
+	@py.test
