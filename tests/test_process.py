@@ -1,6 +1,7 @@
 from datetime import date
 
-from dawer.process import date_from_text, dates_from_filenames
+from dawer.process import (date_from_text, dates_from_filenames,
+                           group_by_month, group_by_year)
 
 
 def test_date_from_text():
@@ -23,6 +24,31 @@ def test_assign_date_to_filenames():
         'portrait.jpg': None,
     }
     result = dates_from_filenames(filenames.keys())
-    for k, v in result.items():
-        if v:
-            assert result[k] == v
+    for string, corresponding_date in result:
+        assert filenames[string] == corresponding_date
+
+
+def test_group_by_year():
+    dated_files = [
+        ('0.jpg', date(2014, 05, 12)),
+        ('1.png', date(2016, 05, 12)),
+        ('2.jpeg', date(2015, 05, 13)),
+        ('3.jpeg', date(2014, 05, 11)),
+    ]
+    result = group_by_year(dated_files)
+    for file in dated_files:
+        filename, time = file
+        assert file in result[time.year]
+
+
+def test_group_by_month():
+    dated_files = [
+        ('0.jpg', date(2014, 05, 12)),
+        ('1.png', date(2015, 05, 12)),
+        ('2.jpeg', date(2015, 05, 13)),
+        ('3.jpeg', date(2014, 06, 11)),
+    ]
+    data_structure = group_by_month(dated_files)
+    for file in dated_files:
+        filename, time = file
+        assert file in data_structure[time.year][time.month]
