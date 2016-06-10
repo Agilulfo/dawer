@@ -1,18 +1,20 @@
 from datetime import date
 
-from dawer.process import (date_from_text, dates_from_filenames,
-                           group_by_month, group_by_year)
+from dawer.process import (DateParser, dates_from_filenames, group_by_month,
+                           group_by_year)
 
 
-def test_date_from_text():
+def test_DateParser():
     filename = '2016-05-12 15.32.00.jpg'
-    result = date_from_text(filename)
+    parser = DateParser()
+    result = parser.get_date(filename)
     assert result == date(2016, 5, 12)
 
 
-def test_date_from_text_wrong():
+def test_DateParser_wrong():
     filename = "IMG-123.jpg"
-    result = date_from_text(filename)
+    parser = DateParser()
+    result = parser.get_date(filename)
     assert result is None
 
 
@@ -23,7 +25,8 @@ def test_assign_date_to_filenames():
         '2016-05-13.jpg': date(2016, 05, 13),
         'portrait.jpg': None,
     }
-    result = dates_from_filenames(filenames.keys())
+    parser = DateParser()
+    result = dates_from_filenames(filenames.keys(), parser)
     for string, corresponding_date in result:
         assert filenames[string] == corresponding_date
 

@@ -4,22 +4,24 @@ from datetime import date
 from .constants import DEFAULT_DATE_REGEXP
 
 
-def date_from_text(text):
-    # TODO: use global regexp
-    regexp = re.compile(DEFAULT_DATE_REGEXP)
-    match = regexp.match(text)
-    if match:
-        year = int(match.group('year'))
-        month = int(match.group('month'))
-        day = int(match.group('day'))
-        return date(year, month, day)
-    return None
+class DateParser:
+    def __init__(self, regexp_string=DEFAULT_DATE_REGEXP):
+        self.regexp = re.compile(regexp_string)
+
+    def get_date(self, text):
+        match = self.regexp.match(text)
+        if match:
+            year = int(match.group('year'))
+            month = int(match.group('month'))
+            day = int(match.group('day'))
+            return date(year, month, day)
+        return None
 
 
-def dates_from_filenames(filenames):
+def dates_from_filenames(filenames, dateparser):
     results = []
     for filename in filenames:
-        date = date_from_text(filename)
+        date = dateparser.get_date(filename)
         if date:
             results.append((filename, date))
     return results
@@ -27,10 +29,10 @@ def dates_from_filenames(filenames):
 
 def group_by_year(dated_files):
     result = {}
-    for filename, date in dated_files:
-        year = date.year
+    for filename, file_date in dated_files:
+        year = file_date.year
         list_of_dates = result.get(year, [])
-        list_of_dates.append((filename, date))
+        list_of_dates.append((filename, file_date))
         result[year] = list_of_dates
     return result
 
@@ -41,10 +43,10 @@ def group_by_month(dated_files):
     for year in years:
         files = result[year]
         months = {}
-        for filename, date in files:
-            month = date.month
+        for filename, file_date in files:
+            month = file_date.month
             list_of_dates = months.get(month, [])
-            list_of_dates.append((filename, date))
+            list_of_dates.append((filename, file_date))
             months[month] = list_of_dates
         result[year] = months
     return result
