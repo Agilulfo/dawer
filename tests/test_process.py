@@ -1,7 +1,7 @@
 from datetime import date
 
-from dawer.process import (DateParser, dates_from_filenames, group_by_month,
-                           group_by_year)
+from dawer.process import (DateParser, extract_date_from_strings,
+                           group_by_month, group_by_year)
 
 
 def test_DateParser():
@@ -26,9 +26,12 @@ def test_assign_date_to_filenames():
         'portrait.jpg': None,
     }
     parser = DateParser()
-    result = dates_from_filenames(filenames.keys(), parser)
+    result, skipped = extract_date_from_strings(filenames.keys(), parser)
     for string, corresponding_date in result:
         assert filenames[string] == corresponding_date
+
+    for filename in skipped:
+        assert filenames[filename] is None
 
 
 def test_group_by_year():
