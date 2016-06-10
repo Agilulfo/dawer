@@ -18,18 +18,6 @@ class DateParser:
         return None
 
 
-def extract_date_from_strings(strings, dateparser):
-    results = []
-    skipped = []
-    for string in strings:
-        date = dateparser.get_date(string)
-        if date:
-            results.append((string, date))
-        else:
-            skipped.append(string)
-    return results, skipped
-
-
 def group_by_year(dated_files):
     result = {}
     for filename, file_date in dated_files:
