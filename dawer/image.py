@@ -27,10 +27,10 @@ class Image:
 class ImagesHandler:
     images = []
 
-    def __init__(self, destination_path=None):
-        if destination_path and not exists(destination_path):
-            raise NotValidPath(destination_path)
-        self.destination_path = destination_path
+    def __init__(self, destination=None):
+        if destination and not exists(destination):
+            raise NotValidPath(destination)
+        self.destination = destination
         self.dateparser = DateParser()
 
     def load_images_from_path(self, directory):
@@ -41,3 +41,9 @@ class ImagesHandler:
             image = Image(directory, filename)
             image.extract_date_from_name(self.dateparser)
             self.images.append(image)
+
+    # TODO: test!
+    def move_images(self):
+        for image in self.images:
+            if image.date:
+                image.move_to(self.destination)
