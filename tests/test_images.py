@@ -1,4 +1,5 @@
 from datetime import date
+from os.path import join
 
 from mock import patch
 
@@ -30,9 +31,25 @@ def test_extract_date_from_unformatted_filename():
     assert image.date is None
 
 
+@patch('dawer.image.move_files_to_dir')
+def test_move_image(move):
+    source_base_path = './a'
+    destination_base_path = './b'
+    image_name = '2016-05-12 15.32.00.jpg'
+
+    image = Image(source_base_path, image_name)
+    image.date = date(2016, 5, 12)
+    image.move_to(destination_base_path)
+
+    move.assert_called_with(
+        [join(source_base_path, image_name)],
+        join(destination_base_path, '2016/05/')
+    )
+
+
 @patch('dawer.image.get_images_in_folder')
 def test_image_handler_load_images(img_list):
-    fake_dir = './fakedir/'
+    fake_dir = './'
     files = {
         '2016-05-12 15.32.00.jpg': date(2016, 05, 12),
         '2016-05-12 15.32.02.png': date(2016, 05, 12),
