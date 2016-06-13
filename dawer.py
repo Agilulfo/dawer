@@ -16,15 +16,15 @@ def main():
         metavar='path', type=str,
         help='collection path'
     )
-    parser.add_argument(
-        '--test', dest='test', const=True,
-        default=False, action='store_const'
-    )
+    # parser.add_argument(
+    #     '--test', dest='test', const=True,
+    #     default=False, action='store_const'
+    # )
     args = parser.parse_args()
 
     source = args.source_dir
     collection_path = args.collection_path or source
-    test = args.test
+    # test = args.test
 
     images_handler = ImagesHandler(collection_path)
     images_handler.load_images_from_path(source)
