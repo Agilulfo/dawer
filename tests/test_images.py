@@ -47,6 +47,7 @@ def test_move_image(move):
     move.assert_called_with([source], destination)
     assert image.directory == destination
 
+
 @patch('dawer.image.get_images_in_folder')
 def test_image_handler_load_images(img_list):
     fake_dir = './'
