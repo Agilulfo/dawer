@@ -15,13 +15,14 @@ class Image:
     def extract_date_from_name(self, dateparser):
         self.date = dateparser.get_date(self.filename)
 
-    def move_to(self, base_path):
+    def move_to_collection(self, collection_path):
         date_folder = '{year:04}/{month:02}/'.format(
             year=self.date.year, month=self.date.month
         )
-        destination = join(base_path, date_folder)
+        destination = join(collection_path, date_folder)
         source = join(self.directory, self.filename)
         move_files_to_dir([source], destination)
+        self.directory = destination
 
 
 class ImagesHandler:
