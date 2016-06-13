@@ -37,8 +37,8 @@ class Image:
 class ImagesHandler:
     images = []
 
-    def __init__(self, collection_path=None):
-        if collection_path and not exists(collection_path):
+    def __init__(self, collection_path):
+        if not exists(collection_path):
             raise NotValidPath(collection_path)
         self.collection_path = collection_path
         self.dateparser = DateParser()
@@ -52,8 +52,7 @@ class ImagesHandler:
             image.extract_date_from_name(self.dateparser)
             self.images.append(image)
 
-    # TODO: test!
     def move_images_to_collection(self):
         for image in self.images:
             if image.date:
-                image.move_to(self.collection_path)
+                image.move_to_collection(self.collection_path)

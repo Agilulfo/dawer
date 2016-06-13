@@ -2,7 +2,7 @@ from datetime import date
 from os.path import join
 
 import pytest
-from mock import patch
+from mock import MagicMock, patch
 
 from dawer.exceptions import UnknownImageDate
 from dawer.image import Image, ImagesHandler
@@ -85,7 +85,28 @@ def test_image_handler_load_images(img_list):
         'portrait.jpg': None,
     }
     img_list.return_value = files.keys()
-    image_handler = ImagesHandler()
+    image_handler = ImagesHandler(fake_dir)
     image_handler.load_images_from_path(fake_dir)
     for image in image_handler.images:
         assert image.date == files[image.filename]
+
+
+def test_move_images_to_collection():
+    fake_dir = './'
+    image_handler = ImagesHandler(fake_dir)
+
+    image = Image(fake_dir, 'img.jpg')
+    move_to_collection = MagicMock()
+    image.move_to_collection = move_to_collection
+
+    # image has no date
+    image_handler.images = [image]
+    image_handler.move_images_to_collection()
+
+    move_to_collection.assert_not_called()
+
+    # image has a date associated
+    image.date = date.today()
+    image_handler.move_images_to_collection()
+
+    move_to_collection.assert_called_with(fake_dir)

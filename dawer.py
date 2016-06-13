@@ -28,7 +28,7 @@ def main():
 
     images_handler = ImagesHandler(collection_path)
     images_handler.load_images_from_path(source)
-    images_handler.move_images()
+    images_handler.move_images_to_collection()
 
 
 if __name__ == '__main__':
