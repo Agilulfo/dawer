@@ -15,3 +15,9 @@ run:
 
 test:
 	@py.test -s
+
+syntax-checks:
+	@make flake8
+	@isort -rc . --check-only -vb
+
+travis-ci: test syntax-checks

@@ -5,30 +5,30 @@ from dawer.image import ImagesHandler
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Move images to subfolders by date'
+        description='Move images to subfolders of a collection'
     )
     parser.add_argument(
         'source_dir', metavar='path', type=str,
         help='path from where images are taken'
     )
     parser.add_argument(
-        '--dest', dest='destination_dir',
+        '--collection', dest='collection_path',
         metavar='path', type=str,
-        help='destination path'
+        help='collection path'
     )
-    parser.add_argument(
-        '--test', dest='test', const=True,
-        default=False, action='store_const'
-    )
+    # parser.add_argument(
+    #     '--test', dest='test', const=True,
+    #     default=False, action='store_const'
+    # )
     args = parser.parse_args()
 
     source = args.source_dir
-    destination = args.destination_dir or source
-    test = args.test
+    collection_path = args.collection_path or source
+    # test = args.test
 
-    images_handler = ImagesHandler(destination)
+    images_handler = ImagesHandler(collection_path)
     images_handler.load_images_from_path(source)
-    images_handler.move_images()
+    images_handler.move_images_to_collection()
 
 
 if __name__ == '__main__':
